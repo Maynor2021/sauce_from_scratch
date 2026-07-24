@@ -28,7 +28,8 @@ stages:
 
           - script: |
               python -m pip install --upgrade pip
-              pip install pytest pytest-html playwright
+              pip install -r requirements.txt
+              pip install pytest-html pytest-xdist
               playwright install chromium --with-deps
             displayName: 'Instalar dependencias'
 
@@ -53,6 +54,7 @@ stages:
 
           - task: PublishBuildArtifacts@1
             condition: failed()   # screenshots solo existen si algo falló
+            continueOnError: true
             inputs:
               pathToPublish: 'screenshots'
               artifactName: 'smoke-screenshots'
@@ -75,10 +77,11 @@ stages:
 
           - script: |
               python -m pip install --upgrade pip
-              pip install pytest pytest-html pytest-xdist playwright
+              pip install -r requirements.txt
+              pip install pytest-html pytest-xdist
               playwright install chromium --with-deps
             displayName: 'Instalar dependencias'
-
+            
           # -n 2 = ejecución en paralelo con pytest-xdist
           - script: |
               pytest -m regression -n 2 --junitxml=results/regression-junit.xml --html=results/regression-report.html --self-contained-html
@@ -99,6 +102,7 @@ stages:
 
           - task: PublishBuildArtifacts@1
             condition: failed()
+            continueOnError: true
             inputs:
               pathToPublish: 'screenshots'
               artifactName: 'regression-screenshots'

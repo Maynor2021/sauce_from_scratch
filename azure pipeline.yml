@@ -7,7 +7,7 @@ trigger:
     include:
       - main
       - origin
-      -master
+      - master
 
 pool:
   vmImage: 'ubuntu-latest'   # Linux: más rápido y barato que Windows
